@@ -33,7 +33,8 @@
 			showOnError: false,
 			proxyConsole: true,
 			isCollapsed: false,
-			catchErrors: true
+			catchErrors: true,
+			canExecuteJs: true
 		},
 
 		init: function(){
@@ -141,6 +142,7 @@
 			el.style.display = 'none';
 			document.body.appendChild(el);
 
+			this.$el.inputContainer = document.getElementById('jsmc-input-container');
 			this.$el.input = document.getElementById('jsmc-input');
 			this.$el.button = document.getElementById('jsmc-button');
 			this.$el.log = document.getElementById('jsmc-log');
@@ -149,6 +151,11 @@
 			this.$el.clearControl = document.getElementById('jsmc-clear');
 			this.$el.commandsControl = document.getElementById('jsmc-commands');
 			this.$el.commandsContainer = document.getElementById('jsmc-commands-container');
+
+			if(!this.props.canExecuteJs){
+				this.$el.inputContainer.style.display = 'none';
+				this.$el.button.style.display = 'none';
+			}
 
 			if (this.props.isCollapsed){
 				this.$el.content.style.display = 'none';
