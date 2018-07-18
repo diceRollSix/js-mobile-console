@@ -35,7 +35,9 @@
 			proxyConsole: true,
 			isCollapsed: false,
 			catchErrors: true,
-			canExecuteJs: true
+			canExecuteJs: true,
+			canBeExpanded: true,
+			expandedRate: 0.8
 		},
 
 		isExtended: false,
@@ -156,9 +158,13 @@
 			this.$el.commandsControl = document.getElementById('jsmc-commands');
 			this.$el.commandsContainer = document.getElementById('jsmc-commands-container');
 
-			if(!this.props.canExecuteJs){
+			if (!this.props.canExecuteJs){
 				this.$el.inputContainer.style.display = 'none';
 				this.$el.button.style.display = 'none';
+			}
+
+			if (!this.props.canBeExpanded){
+				this.$el.extendedControl.style.display = 'none';
 			}
 
 			if (this.props.isCollapsed){
@@ -193,6 +199,9 @@
 		},
 
 		toggleExtended: function(toBeExtended){
+			if (!this.props.canBeExpanded){
+				return;
+			}
 			if (this.isCollapsed){
 				return;
 			}
@@ -200,7 +209,7 @@
 			this.$el.extendedControl.innerHTML = this.isExtended ? '&#9660;' : '&#9650;';
 			if (this.isExtended) {
 				this.$el.collapseControl.style.display = 'none';
-				var newHeight = Math.floor(window.innerHeight * 0.9) - 20;
+				var newHeight = Math.floor(window.innerHeight * this.props.expandedRate) - 20;
 				if(this.canExecuteJs){
 					newHeight -= 21;
 				}
