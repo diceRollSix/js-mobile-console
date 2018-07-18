@@ -57,6 +57,7 @@
 }
 
 #jsmc-collapse,
+#jsmc-extended,
 #jsmc-commands,
 #jsmc-clear{
 	cursor: pointer;

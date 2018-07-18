@@ -10,6 +10,7 @@
 
 	var containerHtml = '' + 
 	'<div id="jsmc-collapse"></div>' +
+	'<div id="jsmc-extended"></div>' +
 	'<div id="jsmc-clear">&#xd7</div>' +
 	'<div id="jsmc-commands">&#x2261</div>' +
 	'<div id="jsmc-commands-container"></div>' +	
@@ -36,6 +37,8 @@
 			catchErrors: true,
 			canExecuteJs: true
 		},
+
+		isExtended: false,
 
 		init: function(){
 			this.commandsHash = [];
@@ -148,6 +151,7 @@
 			this.$el.log = document.getElementById('jsmc-log');
 			this.$el.content = document.getElementById('jsmc-content');
 			this.$el.collapseControl = document.getElementById('jsmc-collapse');
+			this.$el.extendedControl = document.getElementById('jsmc-extended');
 			this.$el.clearControl = document.getElementById('jsmc-clear');
 			this.$el.commandsControl = document.getElementById('jsmc-commands');
 			this.$el.commandsContainer = document.getElementById('jsmc-commands-container');
@@ -166,6 +170,8 @@
 			} else {
 				this.$el.collapseControl.innerHTML = '&#9660;';				
 			}
+
+			this.$el.extendedControl.innerHTML = '&#9650;';
 		},
 
 		toggleCollapsed: function(toBeCollapsed){
@@ -176,18 +182,44 @@
 			if (this.isCollapsed){
 				this.$el.clearControl.style.display = 'none';
 				this.$el.commandsControl.style.display = 'none';
+				this.$el.extendedControl.style.display = 'none';
 			} else {
 				this.$el.clearControl.style.display = 'inline-block';
+				this.$el.extendedControl.style.display = 'inline-block';
 				if (this.commandsHashLength){
 					this.$el.commandsControl.style.display = 'inline-block';
 				}
 			}
 		},
 
+		toggleExtended: function(toBeExtended){
+			if (this.isCollapsed){
+				return;
+			}
+			this.isExtended = typeof toBeExtended === 'boolean' ? toBeExtended : !this.isExtended;
+			this.$el.extendedControl.innerHTML = this.isExtended ? '&#9660;' : '&#9650;';
+			if (this.isExtended) {
+				this.$el.collapseControl.style.display = 'none';
+				var newHeight = Math.floor(window.innerHeight * 0.9) - 20;
+				if(this.canExecuteJs){
+					newHeight -= 21;
+				}
+				this.$el.log.style.maxHeight = newHeight + 'px';
+			} else {
+				this.$el.collapseControl.style.display = 'inline-block';
+				this.$el.log.style.maxHeight = '100px';
+			}
+			
+		},
+
 		bindListeners: function(){
 			var self = this;
 			this.$el.collapseControl.addEventListener('click', function(){
 				self.toggleCollapsed();
+			});
+
+			this.$el.extendedControl.addEventListener('click', function(){
+				self.toggleExtended();
 			});
 
 			this.$el.clearControl.addEventListener('click', function(){
@@ -246,6 +278,7 @@
 
 		clearLogs: function(){
 			this.$el.log.innerHTML = '';
+			this.toggleExtended(false);
 		},
 
 		bindErrorListener: function(){
