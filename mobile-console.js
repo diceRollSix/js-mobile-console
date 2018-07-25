@@ -171,6 +171,7 @@
 				this.$el.content.style.display = 'none';
 				this.$el.clearControl.style.display = 'none';
 				this.$el.commandsControl.style.display = 'none';
+				this.$el.extendedControl.style.display = 'none';
 				this.isCollapsed = true;
 				this.$el.collapseControl.innerHTML = '&#9650;';
 			} else {
